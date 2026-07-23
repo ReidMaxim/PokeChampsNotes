@@ -23,6 +23,13 @@
             background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
             border: 1px solid #374151;
         }
+        input, select, textarea {
+            color: #ffffff !important;
+            caret-color: #ffffff;
+        }
+        input::placeholder, textarea::placeholder {
+            color: #94a3b8 !important;
+        }
         textarea {
             font-family: 'Monaco', 'Courier New', monospace;
             font-size: 0.875rem;
@@ -34,27 +41,42 @@
             border-left: 3px solid #3b82f6;
             margin-bottom: 0.5rem;
             border-radius: 0.25rem;
-        }
-        .btn-primary {
-            @apply px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded transition-colors;
-        }
-        .btn-secondary {
-            @apply px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white font-medium rounded transition-colors;
-        }
-        .btn-success {
-            @apply px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-medium rounded transition-colors;
-        }
-        .btn-danger {
-            @apply px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-medium rounded transition-colors;
+            color: #e2e8f0;
         }
         .input-field {
-            @apply w-full px-3 py-2 bg-slate-800 border border-slate-600 rounded text-white placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500;
+            width: 100%;
+            padding: 0.5rem 0.75rem;
+            background: #1e293b;
+            border: 1px solid #475569;
+            border-radius: 0.375rem;
+            color: #ffffff;
+            transition: all 0.2s ease;
+        }
+        .input-field:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
         }
         .dropdown-field {
-            @apply w-full px-3 py-2 bg-slate-800 border border-slate-600 rounded text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500;
+            width: 100%;
+            padding: 0.5rem 0.75rem;
+            background: #1e293b;
+            border: 1px solid #475569;
+            border-radius: 0.375rem;
+            color: #ffffff;
+            transition: all 0.2s ease;
+        }
+        .dropdown-field:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
         }
         .label-text {
-            @apply block text-sm font-semibold text-slate-300 mb-1;
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #cbd5e1;
+            margin-bottom: 0.375rem;
         }
         .success-toast {
             position: fixed;
@@ -71,6 +93,49 @@
             from { transform: translateX(400px); opacity: 0; }
             to { transform: translateX(0); opacity: 1; }
         }
+        .btn {
+            padding: 0.5rem 1rem;
+            font-weight: 500;
+            border-radius: 0.375rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 1rem;
+        }
+        .btn-primary {
+            background-color: #2563eb;
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: #1d4ed8;
+        }
+        .btn-secondary {
+            background-color: #475569;
+            color: white;
+        }
+        .btn-secondary:hover {
+            background-color: #334155;
+        }
+        .btn-success {
+            background-color: #16a34a;
+            color: white;
+        }
+        .btn-success:hover {
+            background-color: #15803d;
+        }
+        .turn-controls {
+            display: flex;
+            gap: 0.75rem;
+            align-items: flex-end;
+            margin-bottom: 1rem;
+        }
+        .turn-number-wrapper {
+            flex-shrink: 0;
+            width: 80px;
+        }
+        .turn-note-wrapper {
+            flex: 1;
+        }
     </style>
 </head>
 <body class="bg-slate-900 text-slate-100 min-h-screen">
@@ -83,8 +148,8 @@
 
         <!-- Quick Controls -->
         <div class="flex gap-2 mb-6 flex-wrap">
-            <button id="newGameBtn" class="btn-secondary">New Game</button>
-            <button id="copyLogBtn" class="btn-success">📋 Copy Full Log</button>
+            <button id="newGameBtn" class="btn btn-secondary">New Game</button>
+            <button id="copyLogBtn" class="btn btn-success">📋 Copy Full Log</button>
         </div>
 
         <!-- Main Form Container -->
@@ -213,17 +278,17 @@
                 <!-- Step 4: Turn-by-Turn Notes -->
                 <div class="section-card p-6 rounded-lg">
                     <h2 class="text-2xl font-bold text-blue-400 mb-4">Step 4: Turn-by-Turn Notes</h2>
-                    <div class="flex gap-3 mb-4">
-                        <div class="flex-shrink-0 w-20">
+                    <div class="turn-controls">
+                        <div class="turn-number-wrapper">
                             <label class="label-text">Turn #</label>
                             <input type="number" id="turnNumber" class="input-field" value="1" min="1">
                         </div>
-                        <div class="flex-1">
+                        <div class="turn-note-wrapper">
                             <label class="label-text">Note</label>
                             <input type="text" id="turnNote" class="input-field" placeholder="e.g., TR set, Scovillain burned Staraptor">
                         </div>
                     </div>
-                    <button id="addNoteBtn" class="btn-primary w-full">+ Add Note</button>
+                    <button id="addNoteBtn" class="btn btn-primary w-full">+ Add Note</button>
 
                     <!-- Turn Log Display -->
                     <div id="turnLog" class="mt-6 max-h-80 overflow-y-auto">
@@ -262,7 +327,7 @@
                     <h2 class="text-2xl font-bold text-green-400 mb-4">Match Summary</h2>
                     <p class="text-slate-400 text-sm mb-4">Copy this to Google Sheets or Discord</p>
                     <textarea id="outputLog" class="input-field h-96 resize-none text-xs" readonly placeholder="Summary will generate here..."></textarea>
-                    <button id="copyBtn" class="btn-success w-full mt-3">📋 Copy to Clipboard</button>
+                    <button id="copyBtn" class="btn btn-success w-full mt-3">📋 Copy to Clipboard</button>
                 </div>
             </div>
         </div>
